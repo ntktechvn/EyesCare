@@ -20,17 +20,12 @@ namespace EyesCare
             "Ngưng tập trung vào màn hình máy tính một lúc",
             "Một chút cà phê hoặc chút nước lọc",
         ];
-        readonly int screenWidth;
-        readonly int screenHeight;
+        public int screenWidth;
+        public int screenHeight;
         public FormBreak()
         {
             InitializeComponent();
-            int screenLeft = SystemInformation.VirtualScreen.Left;
-            int screenTop = SystemInformation.VirtualScreen.Top;
-            screenWidth = SystemInformation.VirtualScreen.Width;
-            screenHeight = SystemInformation.VirtualScreen.Height;
-            this.Size = new Size(screenWidth, screenHeight);
-            this.Location = new Point(screenLeft, screenTop);
+
 
             countToClose = new Timer();
             countToClose.Tick += EndOfTime;
@@ -48,6 +43,13 @@ namespace EyesCare
         {
             if (!this.Modal)
             {
+                int screenLeft = SystemInformation.VirtualScreen.Left;
+                int screenTop = SystemInformation.VirtualScreen.Top;
+                screenWidth = SystemInformation.VirtualScreen.Width;
+                screenHeight = SystemInformation.VirtualScreen.Height;
+                this.Size = new Size(screenWidth, screenHeight);
+                this.Location = new Point(screenLeft, screenTop);
+
                 var messages = type == "short" ? ShortBreakMessages : LongBreakMessages;
                 Random random = new();
                 string message = messages[random.Next(0, messages.Length)];
