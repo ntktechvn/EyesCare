@@ -110,7 +110,7 @@ namespace EyesCare
         int countShort = 0;
 
         int countMouseIdle = 0;
-        int maxCountMouseIdle = 3;
+        int maxCountMouseIdle = 30;
         Point currentMouse;
         bool pauseTimer = false;
         private void Timer_tick(object? sender, EventArgs? e)
