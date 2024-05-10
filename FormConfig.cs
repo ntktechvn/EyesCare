@@ -62,6 +62,9 @@ namespace EyesCare
 
             checkBoxStartWithWindow.Checked = Settings.Default.StartWithWin;
 
+            checkBoxCheckIDLE.Checked = Settings.Default.DetectIDLE;
+
+
             FormBreak = new FormBreak();
 
             timer = new Timer();
@@ -70,34 +73,91 @@ namespace EyesCare
             timer.Start();
         }
 
+
+        /// <summary>
+        /// Struct representing a point.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+
+            public static implicit operator Point(POINT point)
+            {
+                return new Point(point.X, point.Y);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the cursor's position, in screen coordinates.
+        /// </summary>
+        /// <see>See MSDN documentation for further information.</see>
+        [DllImport("user32.dll")]
+        public static extern bool GetCursorPos(out POINT lpPoint);
+
+        public static Point GetCursorPosition()
+        {
+            POINT lpPoint;
+            GetCursorPos(out lpPoint);
+            // NOTE: If you need error handling
+            // bool success = GetCursorPos(out lpPoint);
+            // if (!success)
+
+            return lpPoint;
+        }
         int countLong = 0;
         int countShort = 0;
+
+        int countMouseIdle = 0;
+        int maxCountMouseIdle = 3;
+        Point currentMouse;
+        bool pauseTimer = false;
         private void Timer_tick(object? sender, EventArgs? e)
         {
-            if (Settings.Default.LongBreak)
+            if (Settings.Default.DetectIDLE && !FormBreak.Modal)
             {
-                countLong++;
-                var secs = ConvertToSecond(Settings.Default.LongBreakTime) - countLong;
-                TimeSpan t = TimeSpan.FromSeconds(secs);
-                toolStripStatusLabelLongtBreakTimer.Text = string.Format("Nghỉ dài sau {0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-                if (countLong >= ConvertToSecond(Settings.Default.LongBreakTime))
+                Point currentMouseTmp = GetCursorPosition();
+                Console.WriteLine(currentMouseTmp);
+                if (currentMouseTmp == currentMouse)
                 {
-                    countLong = 0;
-                    countShort = -ConvertToSecond(Settings.Default.LongBreakRestTime);
-                    FormBreak.ShowNow("long", ConvertToSecond(Settings.Default.LongBreakRestTime));
+                    countMouseIdle++;
                 }
-            }
-            if (Settings.Default.ShortBreak)
-            {
-                countShort++;
-                var secs = ConvertToSecond(Settings.Default.ShortBreakTime) - countShort;
-                TimeSpan t = TimeSpan.FromSeconds(secs);
-                toolStripStatusLabelShortBreakTimer.Text = string.Format("Nghỉ ngắn sau {0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
-                if (countShort >= ConvertToSecond(Settings.Default.ShortBreakTime))
+                else
                 {
-                    countShort = 0;
-                    FormBreak.ShowNow("short", ConvertToSecond(Settings.Default.ShortBreakRestTime));
-                    countShort = -ConvertToSecond(Settings.Default.ShortBreakRestTime);
+                    currentMouse = currentMouseTmp;
+                    countMouseIdle = 0;
+                }
+                pauseTimer = countMouseIdle >= maxCountMouseIdle;
+                toolStripStatusLabelPause.Visible = pauseTimer;
+            }
+            if (!pauseTimer)
+            {
+                if (Settings.Default.LongBreak)
+                {
+                    countLong++;
+                    var secs = ConvertToSecond(Settings.Default.LongBreakTime) - countLong;
+                    TimeSpan t = TimeSpan.FromSeconds(secs);
+                    toolStripStatusLabelLongtBreakTimer.Text = string.Format("Nghỉ dài sau {0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
+                    if (countLong >= ConvertToSecond(Settings.Default.LongBreakTime))
+                    {
+                        countLong = 0;
+                        countShort = -ConvertToSecond(Settings.Default.LongBreakRestTime);
+                        FormBreak.ShowNow("long", ConvertToSecond(Settings.Default.LongBreakRestTime));
+                    }
+                }
+                if (Settings.Default.ShortBreak)
+                {
+                    countShort++;
+                    var secs = ConvertToSecond(Settings.Default.ShortBreakTime) - countShort;
+                    TimeSpan t = TimeSpan.FromSeconds(secs);
+                    toolStripStatusLabelShortBreakTimer.Text = string.Format("Nghỉ ngắn sau {0:D2}:{1:D2}:{2:D2}", t.Hours, t.Minutes, t.Seconds);
+                    if (countShort >= ConvertToSecond(Settings.Default.ShortBreakTime))
+                    {
+                        countShort = 0;
+                        FormBreak.ShowNow("short", ConvertToSecond(Settings.Default.ShortBreakRestTime));
+                        countShort = -ConvertToSecond(Settings.Default.ShortBreakRestTime);
+                    }
                 }
             }
         }
@@ -163,6 +223,7 @@ namespace EyesCare
             Settings.Default.ShortBreakRestTime = comboBoxShortBreakRestTime.Text;
             Settings.Default.PreventClose = checkBoxPreventClose.Checked;
             Settings.Default.StartWithWin = checkBoxStartWithWindow.Checked;
+            Settings.Default.DetectIDLE = checkBoxCheckIDLE.Checked;
             try
             {
                 RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
