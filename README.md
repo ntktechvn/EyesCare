@@ -1,6 +1,10 @@
 ﻿# EyesCare for Windows
 
 Nhắc bạn giữ gìn sức khỏe khi sử dụng máy tính thường xuyên.
+
+![Screenshot](./Screenshots/1.png?raw=true "Screenshot")
+![Screenshot](./Screenshots/2.png?raw=true "Screenshot")
+
 ## Tính năng
 
 * Chống mỏi mắt, nhắc bạn chớp mắt sau 1 khoảng thời gian
