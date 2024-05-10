@@ -14,6 +14,6 @@ Nhắc bạn giữ gìn sức khỏe khi sử dụng máy tính thường xuyên
 - Hệ điều hành Windows 7 trở lên
 
 ## Cài đặt
-- Tải bản phát hành tại đây và chạy file exe
+- Tải bản phát hành tại [đây](https://github.com/ntktechvn/EyesCare/releases/latest) và chạy file exe
 ## Thông tin
 Phần mềm được phát triển bởi [ntktech](https://ntktech.vn) và phát hành miễn phí cho cộng đồng tùy ý sử dụng và chỉnh sửa.
