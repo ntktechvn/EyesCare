@@ -57,7 +57,7 @@ namespace EyesCare
                 buttonClose.Left = screenWidth / 2 - buttonClose.Width / 2;
                 buttonClose.Visible = !Settings.Default.PreventClose;
 
-                labelMessage.Top = screenHeight / 2;
+                labelMessage.Top = screenHeight / 3;
                 labelCount.Top = labelMessage.Top + 100;
                 buttonClose.Top = labelCount.Top + 100;
 

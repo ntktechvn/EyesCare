@@ -97,6 +97,7 @@ namespace EyesCare
                 {
                     countShort = 0;
                     FormBreak.ShowNow("short", ConvertToSecond(Settings.Default.ShortBreakRestTime));
+                    countShort = -ConvertToSecond(Settings.Default.ShortBreakRestTime);
                 }
             }
         }
