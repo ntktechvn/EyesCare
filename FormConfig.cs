@@ -1,6 +1,8 @@
 ﻿using EyesCare.Properties;
 using Microsoft.Win32;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
 using Timer = System.Windows.Forms.Timer;
 
 namespace EyesCare
@@ -307,18 +309,12 @@ namespace EyesCare
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (e.Link != null && e.Link.LinkData != null)
-            {
-                _ = System.Diagnostics.Process.Start((string)e.Link.LinkData);
-            }
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {linkLabel1.Text}") { CreateNoWindow = true });
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (e.Link != null && e.Link.LinkData != null)
-            {
-                _ = System.Diagnostics.Process.Start((string)e.Link.LinkData);
-            }
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {linkLabel2.Text}") { CreateNoWindow = true });
         }
     }
 }
