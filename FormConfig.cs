@@ -162,6 +162,10 @@ namespace EyesCare
                     }
                 }
             }
+            else
+            {
+                countShort = countLong = 0;
+            }
         }
         void InitConfig()
         {
