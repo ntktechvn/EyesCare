@@ -320,5 +320,20 @@ namespace EyesCare
         {
             Process.Start(new ProcessStartInfo("cmd", $"/c start {linkLabel2.Text}") { CreateNoWindow = true });
         }
+
+        private void buttonPause1H_Click(object sender, EventArgs e)
+        {
+            countShort = countLong = -ConvertToSecond(MINUTE60);
+        }
+
+        private void pauseToolStripMenuItem1H_Click(object sender, EventArgs e)
+        {
+            countShort = countLong = -ConvertToSecond(MINUTE60);
+        }
+
+        private void pauseToolStripMenuItem2H_Click(object sender, EventArgs e)
+        {
+            countShort = countLong = -ConvertToSecond(MINUTE60) * 2;
+        }
     }
 }
