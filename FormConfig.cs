@@ -112,7 +112,7 @@ namespace EyesCare
         int countShort = 0;
 
         int countMouseIdle = 0;
-        int maxCountMouseIdle = 30;
+        int maxCountMouseIdle = 60 * 5;
         Point currentMouse;
         bool pauseTimer = false;
         private void Timer_tick(object? sender, EventArgs? e)
@@ -120,7 +120,6 @@ namespace EyesCare
             if (Settings.Default.DetectIDLE && !FormBreak.Modal)
             {
                 Point currentMouseTmp = GetCursorPosition();
-                Console.WriteLine(currentMouseTmp);
                 if (currentMouseTmp == currentMouse)
                 {
                     countMouseIdle++;
